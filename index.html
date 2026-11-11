@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Homework Track</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+          </svg>
+        </div>
+        <span class="brand-name">STUDENT HOMEWORK TRACK</span>
+      </div>
+
+      <nav class="nav-links">
+        <button class="nav-btn active" data-tab="dashboard">Dashboard</button>
+        <button class="nav-btn" data-tab="accomplished">Accomplished Tasks</button>
+        <button class="nav-btn" data-tab="calendar">Calendar</button>
+      </nav>
+
+      <div class="nav-actions">
+        <span class="badge badge-device" id="deviceBadge">Detecting screen...</span>
+        <button id="notifyBtn" class="icon-btn" title="Enable Notifications">🔔</button>
+        <button id="themeToggleBtn" class="icon-btn" title="Toggle Dark/Light Mode">🌙</button>
+        <button id="openTimerBtn" class="btn btn-secondary">⏱️ Study Timer</button>
+        <button id="openAddModalBtn" class="btn btn-primary">+ Add Assignment</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="main-content">
+
+    <!-- View: Dashboard -->
+    <section id="viewDashboard" class="view-section active">
+      <!-- Hero Headline Banner -->
+      <div class="hero-card">
+        <div class="hero-text">
+          <span class="hero-kicker">ACADEMIC WORKSPACE</span>
+          <h1>Stay Organized, Stay Ahead.<br>Continue to Strive!</h1>
+          <p>Track assignments, manage approaching deadlines, and monitor your progress across PC, Tablet, and Mobile.</p>
+        </div>
+        <div class="hero-actions">
+          <button id="heroAddBtn" class="btn btn-white">+ Add Task</button>
+        </div>
+      </div>
+
+      <!-- Semester Progress Bar -->
+      <div class="progress-card">
+        <div class="progress-meta">
+          <span><strong>Semester Progress</strong> · <span id="progressRatio">0 of 0 completed</span></span>
+          <span id="progressPct" class="progress-pct">0%</span>
+        </div>
+        <div class="progress-track">
+          <div id="progressBar" class="progress-fill" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <!-- Stat Cards Strip -->
+      <div class="stats-grid">
+        <div class="stat-card" data-filter="all">
+          <div class="stat-label">Total Tasks</div>
+          <div class="stat-number" id="statTotal">0</div>
+          <div class="stat-sub">assigned items</div>
+        </div>
+        <div class="stat-card" data-filter="In Progress">
+          <div class="stat-label label-amber">In Progress</div>
+          <div class="stat-number" id="statProgress">0</div>
+          <div class="stat-sub">active focus</div>
+        </div>
+        <div class="stat-card" data-filter="dueSoon">
+          <div class="stat-label label-rose">Upcoming / Due Soon</div>
+          <div class="stat-number" id="statUpcoming">0</div>
+          <div class="stat-sub">pending items</div>
+        </div>
+        <div class="stat-card" data-filter="Completed">
+          <div class="stat-label label-emerald">Completed</div>
+          <div class="stat-number" id="statCompleted">0</div>
+          <div class="stat-sub">turned in</div>
+        </div>
+      </div>
+
+      <!-- 2-Column Split: Assignments Table & Deadlines Sidebar -->
+      <div class="dashboard-split">
+        
+        <!-- Left: My Assignments Data Grid -->
+        <div class="card table-card">
+          <div class="card-header">
+            <div>
+              <h2>My Assignments</h2>
+              <p class="subtitle">Review, search, and update assignment status</p>
+            </div>
+            <div class="table-controls">
+              <input type="text" id="searchInput" placeholder="Search assignments..." class="input-search">
+              <select id="subjectFilter" class="select-dropdown">
+                <option value="All">All Subjects</option>
+                <option value="Empowerment Technology">Empowerment Technology</option>
+                <option value="English">English</option>
+                <option value="ICT">ICT</option>
+                <option value="Mathematics">Mathematics</option>
+                <option value="Science">Science</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Status Segmented Controls -->
+          <div class="status-tabs">
+            <button class="status-tab active" data-status="All">All</button>
+            <button class="status-tab" data-status="Pending">Pending</button>
+            <button class="status-tab" data-status="In Progress">In Progress</button>
+            <button class="status-tab" data-status="Completed">Completed</button>
+          </div>
+
+          <!-- Table -->
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th style="width: 48px; text-align: center;">Done</th>
+                  <th>Subject</th>
+                  <th>Assignment</th>
+                  <th>Due Date</th>
+                  <th>Status</th>
+                  <th style="text-align: right;">Action</th>
+                </tr>
+              </thead>
+              <tbody id="assignmentsTableBody">
+                <!-- Injected via JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Right: Deadlines Feed -->
+        <aside class="card deadlines-card">
+          <div class="card-header">
+            <h3>Upcoming Deadlines</h3>
+            <span class="meta-tag">Milestones</span>
+          </div>
+          <div id="deadlinesList" class="deadlines-list">
+            <!-- Injected via JavaScript -->
+          </div>
+          <div class="deadlines-footer">
+            <span>Tip: Work in 25-minute Pomodoro sprints</span>
+          </div>
+        </aside>
+
+      </div>
+    </section>
+
+    <!-- View: Accomplished Tasks -->
+    <section id="viewAccomplished" class="view-section">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h2>Accomplished Homework Archive</h2>
+            <p class="subtitle">Assignments you have successfully turned in</p>
+          </div>
+        </div>
+        <div id="accomplishedList" class="accomplished-list">
+          <!-- Injected via JavaScript -->
+        </div>
+      </div>
+    </section>
+
+    <!-- View: Calendar -->
+    <section id="viewCalendar" class="view-section">
+      <div class="card">
+        <div class="card-header">
+          <h2>Assignment Calendar</h2>
+          <div class="calendar-nav">
+            <button id="prevMonthBtn" class="btn btn-secondary">◀ Prev</button>
+            <span id="calendarMonthTitle" class="calendar-title">November 2026</span>
+            <button id="nextMonthBtn" class="btn btn-secondary">Next ▶</button>
+          </div>
+        </div>
+        <div class="calendar-weekdays">
+          <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+        </div>
+        <div id="calendarGrid" class="calendar-grid">
+          <!-- Injected via JavaScript -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Add/Edit Assignment Modal Dialog -->
+  <div id="assignmentModal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="modalTitle">Add New Assignment</h3>
+        <button id="closeModalBtn" class="close-btn">&times;</button>
+      </div>
+      <form id="assignmentForm">
+        <input type="hidden" id="editAssignmentId">
+        
+        <div class="form-group">
+          <label for="taskTitle">Assignment Title *</label>
+          <input type="text" id="taskTitle" required placeholder="e.g. Web Proposal, Essay Writing...">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="taskSubject">Subject</label>
+            <select id="taskSubject">
+              <option value="Empowerment Technology">Empowerment Technology</option>
+              <option value="English">English</option>
+              <option value="ICT">ICT</option>
+              <option value="Mathematics">Mathematics</option>
+              <option value="Science">Science</option>
+              <option value="General">Other / General</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="taskPriority">Priority</label>
+            <select id="taskPriority">
+              <option value="Low">Low</option>
+              <option value="Medium" selected>Medium</option>
+              <option value="High">High</option>
+              <option value="Urgent">Urgent</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="taskDueDate">Due Date *</label>
+            <input type="date" id="taskDueDate" required>
+          </div>
+          <div class="form-group">
+            <label for="taskStatus">Status</label>
+            <select id="taskStatus">
+              <option value="Pending">Pending</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Completed">Completed</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="taskNotes">Notes / Rubric Details</label>
+          <textarea id="taskNotes" rows="2" placeholder="Add requirements, links, or instructions..."></textarea>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" id="cancelModalBtn" class="btn btn-secondary">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Assignment</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Pomodoro Focus Timer Modal -->
+  <div id="timerModal" class="modal-overlay">
+    <div class="modal-box timer-box">
+      <div class="modal-header">
+        <h3>Pomodoro Study Timer</h3>
+        <button id="closeTimerBtn" class="close-btn">&times;</button>
+      </div>
+      <div class="timer-modes">
+        <button id="focusModeBtn" class="btn btn-secondary active">Focus (25m)</button>
+        <button id="breakModeBtn" class="btn btn-secondary">Break (5m)</button>
+      </div>
+      <div id="timerDisplay" class="timer-clock">25:00</div>
+      <div class="timer-controls">
+        <button id="startTimerBtn" class="btn btn-primary">Start</button>
+        <button id="resetTimerBtn" class="btn btn-secondary">Reset</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
